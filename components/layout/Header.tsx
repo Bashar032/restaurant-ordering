@@ -90,7 +90,7 @@ export function Header() {
 
         {/* Bokningsknapp */}
         <a
-          href="#booking"
+          href="/booking"
           className="hidden min-h-14 items-center justify-center justify-self-end border border-[#B08A52] bg-[#B08A52] px-8 text-xs font-bold uppercase tracking-[0.2em] text-[#191815] transition duration-300 hover:bg-[#C29B61] lg:inline-flex"
         >
           Boka bord
@@ -162,7 +162,7 @@ export function Header() {
           </nav>
 
           <a
-            href="#booking"
+            href="/booking"
             onClick={closeMenu}
             className="mt-auto inline-flex min-h-14 items-center justify-center bg-[#B08A52] px-8 text-xs font-bold uppercase tracking-[0.22em] text-[#191815]"
           >
