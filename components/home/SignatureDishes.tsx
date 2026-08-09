@@ -35,15 +35,15 @@ const dishes = [
 
 export function SignatureDishes() {
   return (
-<section
-  id="signature"
-  aria-labelledby="signature-heading"
-  className="scroll-mt-24 bg-[#191815] text-white"
->
-      <div className="mx-auto max-w-[1600px] px-6 py-24 sm:px-10 lg:px-16 lg:py-32">
-        <div className="mx-auto max-w-3xl text-center">
-          <p className="text-[0.7rem] font-bold uppercase tracking-[0.32em] text-[#B08A52]">
-            Våra signaturrätter
+    <section
+      id="signature"
+      aria-labelledby="signature-heading"
+      className="bg-[#191815] px-5 py-24 text-white sm:px-8 lg:px-14 lg:py-32"
+    >
+      <div className="mx-auto max-w-[1500px]">
+        <div className="text-center">
+          <p className="text-[0.68rem] font-bold uppercase tracking-[0.3em] text-[#B08A52]">
+            Signaturrätter
           </p>
 
           <h2
@@ -98,10 +98,11 @@ export function SignatureDishes() {
                 </p>
 
                 <a
-                  href="#menu"
+                  href="/menu"
                   className="group mt-9 inline-flex items-center gap-4 border-b border-white/35 pb-2 text-xs font-bold uppercase tracking-[0.22em] transition-colors hover:border-[#B08A52] hover:text-[#B08A52]"
                 >
                   Se hela menyn
+
                   <span
                     aria-hidden="true"
                     className="transition-transform duration-300 group-hover:translate-x-2"

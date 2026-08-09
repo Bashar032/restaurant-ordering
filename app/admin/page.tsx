@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import LogoutButton from "@/components/admin/LogoutButton";
 import AdminFloorManager from "../../components/admin/AdminFloorManager";
+import Link from "next/link";
 
 export default async function AdminPage() {
   const supabase = await createClient();
@@ -36,7 +37,30 @@ export default async function AdminPage() {
             <p className="mt-1 font-serif text-2xl">{profile.full_name}</p>
           </div>
 
-          <LogoutButton />
+<div className="flex flex-wrap items-center gap-3">
+  <Link
+    href="/admin"
+    className="border border-white/15 px-4 py-3 text-xs font-bold uppercase tracking-[0.15em] text-white/70 transition hover:border-[#B08A52] hover:text-white"
+  >
+    Bokningar
+  </Link>
+
+  <Link
+    href="/kitchen"
+    className="border border-white/15 px-4 py-3 text-xs font-bold uppercase tracking-[0.15em] text-white/70 transition hover:border-[#B08A52] hover:text-white"
+  >
+    Kök
+  </Link>
+
+  <Link
+    href="/admin/orders"
+    className="border border-white/15 px-4 py-3 text-xs font-bold uppercase tracking-[0.15em] text-white/70 transition hover:border-[#B08A52] hover:text-white"
+  >
+    Orders
+  </Link>
+
+  <LogoutButton />
+</div>
         </div>
       </header>
 

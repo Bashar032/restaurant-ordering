@@ -27,12 +27,14 @@ const menuCategories: MenuCategory[] = [
         name: "Hummus",
         description: "Kikärtsröra med vitlök och olivolja.",
         price: "69 kr",
+        image: "/images/menu/Hummus.webp",
       },
       {
         name: "Mhamara",
         description:
           "En pepprig, het och smakrik röra på paprikapuré, rostade valnötter och granatäpplesirap.",
         price: "69 kr",
+        image: "/images/menu/Mhammara.webp",
       },
       {
         name: "Crème Toum",
@@ -44,11 +46,13 @@ const menuCategories: MenuCategory[] = [
         name: "Moutabal",
         description: "Grillad aubergineröra med en härligt rökig smak.",
         price: "69 kr",
+        image: "/images/menu/Moutabal.webp",
       },
       {
         name: "Tzatziki",
         description: "Mild grekisk yoghurt med gurka.",
         price: "69 kr",
+        image: "/images/menu/Tzatsiki.webp",
       },
       {
         name: "Tarator Djej",
@@ -60,42 +64,46 @@ const menuCategories: MenuCategory[] = [
         description:
           "4 friterade färsbollar fyllda med köttfärs, lök och valnötter.",
         price: "89 kr",
+        image: "/images/menu/Friterad Kebbeh.webp",
       },
       {
         name: "Warak Inab",
         description:
           "Vinbladsdolma fyllda med en syrlig vegetarisk blandning.",
         price: "79 kr",
-        image: "/images/menu/warak-inab.jpg",
+        image: "/images/menu/Warak Inab.webp",
       },
       {
         name: "Tabbouleh",
         description:
           "Persiljesallad smaksatt med lök, hackade tomater och lite bulgur.",
         price: "79 kr",
+        image: "/images/menu/Tabbouleh.webp",
       },
       {
         name: "Ostrullar",
         description: "4 friterade knyten fyllda med ost.",
         price: "79 kr",
+        image: "/images/menu/Friterade Ostrullar.webp",
       },
       {
         name: "Jawanih",
         description: "6 grillade kycklingvingar.",
         price: "79 kr",
+        image: "/images/menu/Jawanih.webp",
       },
       {
         name: "Fattoush",
         description:
           "Sallad med gurka, tomat och rädisor samt syrlighet från färskpressad citronjuice.",
         price: "79 kr",
+        image: "/images/menu/Fattoush.webp",
       },
       {
         name: "Räksallad",
         description:
           "Fräsch sallad med räkor, grönsaker och en syrlig dressing.",
         price: "Fråga personalen",
-        image: "/images/menu/räksallad.jpg",
       },
     ],
   },
@@ -109,7 +117,7 @@ const menuCategories: MenuCategory[] = [
         name: "Hummus Lahme",
         description: "Hummus med smörstekta lammfilébitar.",
         price: "99 kr",
-        image: "/images/menu/hummus-med-kött.jpg",
+        image: "/images/menu/Hummus med kött.webp",
       },
       {
         name: "Scampi",
@@ -120,7 +128,6 @@ const menuCategories: MenuCategory[] = [
         name: "Hummus Scampi",
         description: "Hummus med såsig, smörstekt och het scampi.",
         price: "99 kr",
-        image: "/images/menu/hummus-scampi.jpg",
       },
       {
         name: "Het Scampi",
@@ -150,14 +157,14 @@ const menuCategories: MenuCategory[] = [
         description:
           "2 grillade kycklingspett med grillad paprika, serveras med pommes eller ris.",
         price: "179 kr",
-        image: "/images/menu/kycklingspett.jpg",
+        image: "/images/menu/Kycklingspett.webp",
       },
       {
         name: "Lammspett",
         description:
           "2 grillade spett med lammfilébitar och grillad paprika, serveras med pommes eller ris.",
         price: "229 kr",
-        image: "/images/menu/köttspett.jpg",
+        image: "/images/menu/Lammspett.webp",
       },
       {
         name: "Mix Spett – 2 spett",
@@ -170,14 +177,14 @@ const menuCategories: MenuCategory[] = [
         description:
           "2 köttfärsspett med grillad paprika, serveras med pommes eller ris.",
         price: "179 kr",
-        image: "/images/menu/kebabspett.jpg",
+        image: "/images/menu/Shish Kebab.webp",
       },
       {
         name: "Mix Spett – 3 spett",
         description:
           "Ett kycklingspett, ett köttfärsspett och ett lammspett med grillad paprika, serveras med pommes eller ris.",
         price: "239 kr",
-        image: "/images/menu/mixspett-3-spett.jpg",
+        image: "/images/menu/Mix xl (3 spett ).webp",
       },
       {
         name: "Lammracks",
@@ -204,13 +211,14 @@ const menuCategories: MenuCategory[] = [
         description:
           "Saftig kycklingshawarma serveras med pommes och crème toum.",
         price: "149 kr",
-        image: "/images/menu/shawarma.jpg",
+        image: "/images/menu/Shawarmatallrik.webp",
       },
       {
         name: "Crispy Chicken",
         description:
           "Friterad kyckling med krispig yta och saftigt inre. Serveras med pommes och dip.",
         price: "145 kr",
+        image: "/images/menu/Crispy Chicken.webp",
       },
       {
         name: "Fish & Chips",
@@ -223,13 +231,14 @@ const menuCategories: MenuCategory[] = [
         description:
           "Falafelbollar av torkade kikärter och kryddor, serveras med pommes och hummus.",
         price: "145 kr",
-        image: "/images/menu/falafel-tallrik.jpg",
+        image: "/images/menu/Falafeltallrik.webp",
       },
       {
         name: "Libanesisk Fajita",
         description:
           "Stekt kyckling, lök, paprika, majs och ost i baguette med pommes och avokadosås.",
         price: "159 kr",
+        image: "/images/menu/Libanesisk fajita.webp",
       },
     ],
   },
@@ -343,15 +352,47 @@ const menuCategories: MenuCategory[] = [
         price: "69 kr",
       },
       {
-        name: "Läsk",
-        description: "Coca-Cola, Coca-Cola Zero, Fanta eller Sprite.",
-        price: "35 kr",
-      },
-      {
-        name: "Loka",
-        description: "Naturell eller citron.",
-        price: "35 kr",
-      },
+  name: "Coca-Cola Original",
+  description: "33 cl.",
+  price: "35 kr",
+  image: "/images/menu/Coca-Cola Original Taste 33 cl.webp",
+},
+{
+  name: "Coca-Cola Zero",
+  description: "33 cl.",
+  price: "35 kr",
+  image: "/images/menu/Coca-Cola Zero 33 cl.webp",
+},
+{
+  name: "Fanta Orange",
+  description: "33 cl.",
+  price: "35 kr",
+  image: "/images/menu/Fanta Orange 33 cl.webp",
+},
+{
+  name: "Sprite",
+  description: "33 cl.",
+  price: "35 kr",
+  image: "/images/menu/Sprite 33 cl.webp",
+},
+{
+  name: "Loka Naturell",
+  description: "33 cl.",
+  price: "35 kr",
+  image: "/images/menu/Loka Naturell 33 cl.webp",
+},
+{
+  name: "Loka Citron",
+  description: "33 cl.",
+  price: "35 kr",
+  image: "/images/menu/Loka Citron 33 cl.webp",
+},
+{
+  name: "Powerking",
+  description: "Energidryck · 33 cl.",
+  price: "35 kr",
+  image: "/images/menu/Powerking.webp",
+},
     ],
   },
   {
@@ -547,7 +588,7 @@ export default function MenuPage() {
             </Link>
 
             <Link
-              href="/#booking"
+              href="/booking"
               className="inline-flex min-h-12 items-center justify-center bg-[#B08A52] px-5 text-[0.65rem] font-bold uppercase tracking-[0.18em] text-[#191815] transition hover:bg-[#C9A76D] sm:px-7"
             >
               Boka bord
@@ -558,7 +599,7 @@ export default function MenuPage() {
 
       <section className="relative isolate flex min-h-[92svh] items-end overflow-hidden">
         <Image
-          src="/images/menu/hummus-scampi.jpg"
+          src="/images/menu/Familj Meze bricka.webp"
           alt=""
           fill
           priority
@@ -699,7 +740,7 @@ export default function MenuPage() {
           </div>
 
           <Link
-            href="/#booking"
+            href="/booking"
             className="inline-flex min-h-14 items-center justify-center bg-[#191815] px-8 text-xs font-bold uppercase tracking-[0.22em] text-white transition hover:bg-[#30382A]"
           >
             Boka bord

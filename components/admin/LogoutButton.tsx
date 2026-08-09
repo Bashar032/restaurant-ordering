@@ -1,24 +1,31 @@
 "use client";
 
+import { usePathname, useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
-import { useRouter } from "next/navigation";
 
 export default function LogoutButton() {
   const router = useRouter();
+  const pathname = usePathname();
 
-  const handleLogout = async () => {
+  async function handleLogout() {
     const supabase = createClient();
 
     await supabase.auth.signOut();
 
-    router.push("/admin/login");
+    if (pathname.startsWith("/kitchen")) {
+      router.replace("/admin/login?next=/kitchen");
+    } else {
+      router.replace("/admin/login?next=/admin");
+    }
+
     router.refresh();
-  };
+  }
 
   return (
     <button
+      type="button"
       onClick={handleLogout}
-      className="rounded-lg bg-red-600 px-5 py-3 font-semibold text-white transition hover:bg-red-700"
+      className="inline-flex min-h-11 items-center justify-center bg-red-600 px-5 text-sm font-medium text-white transition hover:bg-red-700"
     >
       Logga ut
     </button>
