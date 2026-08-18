@@ -8,6 +8,7 @@ const navigation = [
   { label: "Om oss", href: "#about" },
   { label: "Signaturrätter", href: "#signature" },
   { label: "Meny", href: "#menu" },
+  { label: "Privata event", href: "/private-events" },
   { label: "Kontakt", href: "#contact" },
 ];
 
@@ -79,7 +80,11 @@ export function Header() {
                 color: "#FFF7E6",
                 textShadow: "0 2px 12px rgba(0, 0, 0, 0.95)",
               }}
-              className="group relative py-3 text-[0.9rem] font-bold uppercase tracking-[0.16em] transition-colors duration-300 hover:!text-[#D4B27C]"
+              className={`group relative py-3 text-[0.9rem] font-bold uppercase tracking-[0.16em] transition-colors duration-300 hover:!text-[#D4B27C] ${
+  item.label === "Privata event"
+    ? "!text-[#D4B27C]"
+    : ""
+}`}
             >
               {item.label}
 
@@ -146,18 +151,26 @@ export function Header() {
             className="flex flex-col border-t border-white/15"
           >
             {navigation.map((item, index) => (
-              <a
-                key={item.label}
-                href={item.href}
-                onClick={closeMenu}
-                className="flex items-center justify-between border-b border-white/15 py-6 font-serif text-3xl text-white"
-              >
-                {item.label}
+<a
+  key={item.label}
+  href={item.href}
+  onClick={closeMenu}
+  style={{
+    color: "#FFF7E6",
+  }}
+  className="flex items-center justify-between border-b border-white/15 py-6 font-serif text-3xl transition-colors hover:!text-[#D4B27C]"
+>
+  <span>
+    {item.label}
+  </span>
 
-                <span className="font-sans text-xs tracking-[0.2em] text-[#B08A52]">
-                  0{index + 1}
-                </span>
-              </a>
+  <span
+    style={{ color: "#B08A52" }}
+    className="font-sans text-xs tracking-[0.2em]"
+  >
+    {String(index + 1).padStart(2, "0")}
+  </span>
+</a>
             ))}
           </nav>
 

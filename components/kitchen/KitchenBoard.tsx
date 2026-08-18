@@ -1,6 +1,11 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { createClient } from "@/lib/supabase/client";
 
 type KitchenItem = {
@@ -23,6 +28,11 @@ type KitchenOrder = {
   items: KitchenItem[];
 };
 
+type KitchenStatus =
+  | "preparing"
+  | "ready"
+  | "served";
+
 function formatTime(date: string) {
   return new Intl.DateTimeFormat("sv-SE", {
     hour: "2-digit",
@@ -34,39 +44,64 @@ function getElapsedMinutes(date: string) {
   return Math.max(
     0,
     Math.floor(
-      (Date.now() - new Date(date).getTime()) / 60_000,
+      (Date.now() - new Date(date).getTime()) /
+        60_000,
     ),
   );
 }
 
 export default function KitchenBoard() {
-  const supabase = useMemo(() => createClient(), []);
+  const supabase = useMemo(
+    () => createClient(),
+    [],
+  );
 
-  const [orders, setOrders] = useState<KitchenOrder[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [message, setMessage] = useState("");
+  const [orders, setOrders] = useState<
+    KitchenOrder[]
+  >([]);
 
-  const loadOrders = useCallback(async () => {
-    const { data, error } = await supabase.rpc(
-      "get_kitchen_orders",
+  const [loading, setLoading] =
+    useState(true);
+
+  const [message, setMessage] =
+    useState("");
+
+  // Håller reda på vilka orders som just nu
+  // håller på att uppdateras.
+  const [updatingOrders, setUpdatingOrders] =
+    useState<Set<string>>(
+      () => new Set(),
     );
 
-    if (error) {
-      setMessage(error.message);
-      setLoading(false);
-      return;
-    }
+  const loadOrders = useCallback(
+    async () => {
+      const { data, error } =
+        await supabase.rpc(
+          "get_kitchen_orders",
+        );
 
-    setOrders((data ?? []) as KitchenOrder[]);
-    setLoading(false);
-  }, [supabase]);
+      if (error) {
+        setMessage(error.message);
+        setLoading(false);
+        return;
+      }
+
+      setOrders(
+        (data ?? []) as KitchenOrder[],
+      );
+
+      setLoading(false);
+    },
+    [supabase],
+  );
 
   useEffect(() => {
     void loadOrders();
 
-    const interval = window.setInterval(() => {
-      void loadOrders();
-    }, 5000);
+    const interval =
+      window.setInterval(() => {
+        void loadOrders();
+      }, 5000);
 
     return () => {
       window.clearInterval(interval);
@@ -75,7 +110,9 @@ export default function KitchenBoard() {
 
   useEffect(() => {
     const channel = supabase
-      .channel("daloona-kitchen-orders")
+      .channel(
+        "daloona-kitchen-orders",
+      )
       .on(
         "postgres_changes",
         {
@@ -101,45 +138,94 @@ export default function KitchenBoard() {
       .subscribe();
 
     return () => {
-      void supabase.removeChannel(channel);
+      void supabase.removeChannel(
+        channel,
+      );
     };
   }, [loadOrders, supabase]);
 
   async function updateStatus(
     orderId: string,
-    status:
-      | "preparing"
-      | "ready"
-      | "served",
+    status: KitchenStatus,
   ) {
-    setMessage("");
-
-    const { error } = await supabase.rpc(
-      "update_kitchen_order_status",
-      {
-        p_order_id: orderId,
-        p_status: status,
-      },
-    );
-
-    if (error) {
-      setMessage(error.message);
+    // Extra skydd mot dubbelklick.
+    if (updatingOrders.has(orderId)) {
       return;
     }
 
-    await loadOrders();
+    setMessage("");
+
+    setUpdatingOrders(
+      (current) => {
+        const next = new Set(current);
+        next.add(orderId);
+        return next;
+      },
+    );
+
+    try {
+      const { error } =
+        await supabase.rpc(
+          "update_kitchen_order_status",
+          {
+            p_order_id: orderId,
+            p_status: status,
+          },
+        );
+
+      if (error) {
+        console.error(
+          "Kunde inte uppdatera order:",
+          error,
+        );
+
+        setMessage(
+          error.message ||
+            "Ordern kunde inte uppdateras.",
+        );
+
+        return;
+      }
+
+      await loadOrders();
+    } catch (error) {
+      console.error(
+        "Oväntat fel vid statusändring:",
+        error,
+      );
+
+      setMessage(
+        "Ett oväntat fel uppstod. Försök igen.",
+      );
+    } finally {
+      setUpdatingOrders(
+        (current) => {
+          const next =
+            new Set(current);
+
+          next.delete(orderId);
+
+          return next;
+        },
+      );
+    }
   }
 
   const newOrders = orders.filter(
-    (order) => order.status === "new",
+    (order) =>
+      order.status === "new",
   );
 
-  const preparingOrders = orders.filter(
-    (order) => order.status === "preparing",
-  );
+  const preparingOrders =
+    orders.filter(
+      (order) =>
+        order.status ===
+        "preparing",
+    );
 
   const readyOrders = orders.filter(
-    (order) => order.status === "ready",
+    (order) =>
+      order.status === "ready",
   );
 
   if (loading) {
@@ -171,6 +257,7 @@ export default function KitchenBoard() {
               <p className="text-xs text-white/45">
                 Nya
               </p>
+
               <p className="mt-1 font-serif text-3xl">
                 {newOrders.length}
               </p>
@@ -180,8 +267,11 @@ export default function KitchenBoard() {
               <p className="text-xs text-white/45">
                 Tillagas
               </p>
+
               <p className="mt-1 font-serif text-3xl">
-                {preparingOrders.length}
+                {
+                  preparingOrders.length
+                }
               </p>
             </div>
 
@@ -189,6 +279,7 @@ export default function KitchenBoard() {
               <p className="text-xs text-white/45">
                 Klara
               </p>
+
               <p className="mt-1 font-serif text-3xl">
                 {readyOrders.length}
               </p>
@@ -209,7 +300,8 @@ export default function KitchenBoard() {
             </p>
 
             <p className="mt-3 text-white/45">
-              Nya QR-beställningar kommer visas här.
+              Nya QR-beställningar
+              kommer visas här.
             </p>
           </div>
         ) : (
@@ -219,8 +311,15 @@ export default function KitchenBoard() {
               subtitle="Väntar på köket"
               orders={newOrders}
               actionLabel="Börja tillaga"
+              loadingLabel="Startar..."
+              updatingOrders={
+                updatingOrders
+              }
               onAction={(id) =>
-                updateStatus(id, "preparing")
+                updateStatus(
+                  id,
+                  "preparing",
+                )
               }
             />
 
@@ -229,8 +328,15 @@ export default function KitchenBoard() {
               subtitle="Pågående"
               orders={preparingOrders}
               actionLabel="Markera klar"
+              loadingLabel="Markerar..."
+              updatingOrders={
+                updatingOrders
+              }
               onAction={(id) =>
-                updateStatus(id, "ready")
+                updateStatus(
+                  id,
+                  "ready",
+                )
               }
             />
 
@@ -239,8 +345,15 @@ export default function KitchenBoard() {
               subtitle="Redo att serveras"
               orders={readyOrders}
               actionLabel="Serverad"
+              loadingLabel="Sparar..."
+              updatingOrders={
+                updatingOrders
+              }
               onAction={(id) =>
-                updateStatus(id, "served")
+                updateStatus(
+                  id,
+                  "served",
+                )
               }
             />
           </div>
@@ -255,12 +368,16 @@ function OrderColumn({
   subtitle,
   orders,
   actionLabel,
+  loadingLabel,
+  updatingOrders,
   onAction,
 }: {
   title: string;
   subtitle: string;
   orders: KitchenOrder[];
   actionLabel: string;
+  loadingLabel: string;
+  updatingOrders: Set<string>;
   onAction: (id: string) => void;
 }) {
   return (
@@ -286,7 +403,15 @@ function OrderColumn({
           <KitchenOrderCard
             key={order.order_id}
             order={order}
-            actionLabel={actionLabel}
+            actionLabel={
+              actionLabel
+            }
+            loadingLabel={
+              loadingLabel
+            }
+            isUpdating={updatingOrders.has(
+              order.order_id,
+            )}
             onAction={onAction}
           />
         ))}
@@ -304,15 +429,20 @@ function OrderColumn({
 function KitchenOrderCard({
   order,
   actionLabel,
+  loadingLabel,
+  isUpdating,
   onAction,
 }: {
   order: KitchenOrder;
   actionLabel: string;
+  loadingLabel: string;
+  isUpdating: boolean;
   onAction: (id: string) => void;
 }) {
-  const elapsed = getElapsedMinutes(
-    order.created_at,
-  );
+  const elapsed =
+    getElapsedMinutes(
+      order.created_at,
+    );
 
   return (
     <article className="overflow-hidden border border-white/10 bg-[#211E1A]">
@@ -332,7 +462,9 @@ function KitchenOrderCard({
 
         <div className="text-right">
           <p className="font-serif text-2xl">
-            {formatTime(order.created_at)}
+            {formatTime(
+              order.created_at,
+            )}
           </p>
 
           <p
@@ -351,30 +483,32 @@ function KitchenOrderCard({
 
       <div className="p-5">
         <div className="space-y-4">
-          {order.items.map((item) => (
-            <div
-              key={item.id}
-              className="border-b border-white/10 pb-4 last:border-b-0 last:pb-0"
-            >
-              <div className="flex gap-4">
-                <span className="font-serif text-2xl text-[#D4B27C]">
-                  {item.quantity}×
-                </span>
+          {order.items.map(
+            (item) => (
+              <div
+                key={item.id}
+                className="border-b border-white/10 pb-4 last:border-b-0 last:pb-0"
+              >
+                <div className="flex gap-4">
+                  <span className="font-serif text-2xl text-[#D4B27C]">
+                    {item.quantity}×
+                  </span>
 
-                <div>
-                  <p className="font-serif text-xl">
-                    {item.name}
-                  </p>
-
-                  {item.note && (
-                    <p className="mt-1 text-sm font-bold text-[#E7C88F]">
-                      {item.note}
+                  <div>
+                    <p className="font-serif text-xl">
+                      {item.name}
                     </p>
-                  )}
+
+                    {item.note && (
+                      <p className="mt-1 text-sm font-bold text-[#E7C88F]">
+                        {item.note}
+                      </p>
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ),
+          )}
         </div>
 
         {order.customer_note && (
@@ -384,7 +518,9 @@ function KitchenOrderCard({
             </p>
 
             <p className="mt-2 leading-6 text-white/80">
-              {order.customer_note}
+              {
+                order.customer_note
+              }
             </p>
           </div>
         )}
@@ -401,12 +537,19 @@ function KitchenOrderCard({
 
         <button
           type="button"
-          onClick={() =>
-            onAction(order.order_id)
-          }
-          className="mt-5 inline-flex min-h-14 w-full items-center justify-center bg-[#B08A52] px-5 text-xs font-bold uppercase tracking-[0.18em] text-[#191815] transition hover:bg-[#C29B61]"
+          disabled={isUpdating}
+          onClick={() => {
+            if (!isUpdating) {
+              onAction(
+                order.order_id,
+              );
+            }
+          }}
+          className="mt-5 inline-flex min-h-14 w-full items-center justify-center bg-[#B08A52] px-5 text-xs font-bold uppercase tracking-[0.18em] text-[#191815] transition hover:bg-[#C29B61] disabled:cursor-not-allowed disabled:opacity-50"
         >
-          {actionLabel}
+          {isUpdating
+            ? loadingLabel
+            : actionLabel}
         </button>
       </div>
     </article>

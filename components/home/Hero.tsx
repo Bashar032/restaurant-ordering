@@ -41,7 +41,7 @@ export function Hero() {
 
         <div className="mt-10 flex w-full max-w-md flex-col justify-center gap-4 sm:w-auto sm:max-w-none sm:flex-row">
           <a
-            href="#booking"
+            href="/booking"
             className="inline-flex min-h-14 items-center justify-center bg-[#B08A52] px-9 text-xs font-bold uppercase tracking-[0.22em] text-[#15130f] transition duration-300 hover:bg-[#c29b61] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
           >
             Boka bord

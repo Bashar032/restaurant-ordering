@@ -519,8 +519,23 @@ export default function BookingPage() {
                   </div>
                 </div>
 
-                <div className="relative aspect-[10/8] overflow-hidden border border-white/10 bg-[#302B26]">
-                  <div className="absolute inset-0 opacity-20 [background-image:linear-gradient(rgba(255,255,255,.08)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.08)_1px,transparent_1px)] [background-size:40px_40px]" />
+<div className="relative aspect-[10/8] overflow-hidden border border-white/10 bg-[#302B26]">
+  <div className="absolute inset-0 opacity-20 [background-image:linear-gradient(rgba(255,255,255,.08)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.08)_1px,transparent_1px)] [background-size:40px_40px]" />
+
+  {/* NORR / VÄTTERN */}
+  <div className="pointer-events-none absolute left-0 right-0 top-0 z-10 flex h-[7%] min-h-10 items-center justify-center border-b border-[#7FA3AE]/35 bg-[#22343A]/80 backdrop-blur-sm">
+    <div className="flex items-center gap-4">
+      <span className="text-[0.58rem] font-bold uppercase tracking-[0.3em] text-[#9FC3CC]">
+        ↑ Norr
+      </span>
+
+      <span className="h-4 w-px bg-white/20" />
+
+      <span className="font-serif text-lg tracking-wide text-[#C7E0E5]">
+        Vättern
+      </span>
+    </div>
+  </div>
 
                   {activeAreaId === "indoor" && (
                     <div className="absolute bottom-[10%] left-[27%] h-[11%] w-[38%] border border-[#D4B27C]/50 bg-[#8A6638]/35">
